@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuaderno de Ritmo — taller de patrones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="hoja">
+
+  <div class="cabecera">
+    <div class="titulo">
+      <h1>Cuaderno de Ritmo</h1>
+      <p>Dibuja un patrón, escucha cómo suena y aprende de qué está hecha una canción.</p>
+    </div>
+    <div class="transporte">
+      <button class="boton tocar" id="tocar" data-sonando="false">Tocar</button>
+      <button class="boton grabar" id="grabar" data-grabando="false">Grabar audio</button>
+      <div class="dial"><label for="bpm">Tempo</label><input type="range" id="bpm" min="60" max="180" value="100"><output for="bpm" id="bpmVal">100</output></div>
+      <div class="dial"><label for="swing">Swing</label><input type="range" id="swing" min="0" max="60" value="0"><output for="swing" id="swingVal">0%</output></div>
+      <div class="dial"><label for="vol">Volumen</label><input type="range" id="vol" min="0" max="100" value="80"><output for="vol" id="volVal">80</output></div>
+    </div>
+  </div>
+
+  <!-- ================= REGISTRO DE VISITANTES ================= -->
+  <section class="registro">
+    <div class="registro-forma" id="registroForma">
+      <div class="registro-texto">
+        <h2>¿Quién está creando?</h2>
+        <p>Deja tu nombre y celular para guardar lo que hagas hoy en la feria.</p>
+      </div>
+      <div class="registro-campos">
+        <label class="campo" for="visNombre">
+          <span>Nombre y apellido</span>
+          <input type="text" id="visNombre" maxlength="40" placeholder="Ana Quispe" autocomplete="name">
+        </label>
+        <label class="campo" for="visTel">
+          <span>Celular</span>
+          <span class="tel"><b>+591</b><input type="tel" id="visTel" inputmode="numeric" maxlength="8" placeholder="70000000" autocomplete="tel-national"></span>
+        </label>
+        <button class="boton" id="btnRegistrar">Empezar</button>
+      </div>
+    </div>
+    <p class="error" id="registroError" hidden></p>
+    <div class="registro-activo" id="registroActivo" hidden>
+      <p>Estás creando como <b id="visActivoNombre"></b> <span id="visActivoTel"></span></p>
+      <button class="boton chico" id="pasarTurno">Terminar y pasar el turno</button>
+    </div>
+  </section>
+
+  <!-- ================= AVATAR ================= -->
+  <div class="escena">
+    <button id="avatarBtn" aria-label="Toca al robot para que dé una vuelta">
+      <svg id="avatar" viewBox="0 0 300 344" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse id="sombra" cx="150" cy="330" rx="66" ry="7" fill="rgba(23,48,122,.12)"/>
+        <g id="cuerpo" fill="none" stroke="#17307A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+
+          <!-- piernas -->
+          <g id="piernaIzq">
+            <path d="M133 248 v42"/>
+            <circle cx="133" cy="248" r="6.5" fill="#F8F9F3"/>
+            <rect x="114" y="290" width="38" height="15" rx="6" fill="#F8F9F3"/>
+          </g>
+          <g id="piernaDer">
+            <path d="M167 248 v42"/>
+            <circle cx="167" cy="248" r="6.5" fill="#F8F9F3"/>
+            <rect x="148" y="290" width="38" height="15" rx="6" fill="#F8F9F3"/>
+          </g>
+
+          <!-- brazos -->
+          <g id="brazoIzq">
+            <path d="M108 174 q-30 14 -33 46"/>
+            <circle cx="75" cy="222" r="9" fill="#F8F9F3"/>
+            <path d="M69 216 l-7 -7 M81 216 l7 -7"/>
+          </g>
+          <g id="brazoDer">
+            <path d="M192 174 q30 14 33 46"/>
+            <circle cx="225" cy="222" r="9" fill="#F8F9F3"/>
+            <path d="M231 216 l7 -7 M219 216 l-7 -7"/>
+          </g>
+
+          <!-- torso -->
+          <rect x="108" y="158" width="84" height="90" rx="18" fill="#F8F9F3"/>
+          <rect x="124" y="176" width="52" height="36" rx="7" fill="#FFFFFF"/>
+          <g id="leds" stroke="none">
+            <rect id="led1" x="131" y="198" width="10" height="10" fill="#0F9E77"/>
+            <rect id="led2" x="145" y="198" width="10" height="10" fill="#EFB80B"/>
+            <rect id="led3" x="159" y="198" width="10" height="10" fill="#E8477F"/>
+          </g>
+          <circle cx="150" cy="230" r="7" fill="#F8F9F3"/>
+          <path d="M150 223 v-4"/>
+          <path d="M138 152 v8 M162 152 v8"/>
+
+          <!-- cabeza -->
+          <g id="cabeza">
+            <g id="antena">
+              <path d="M150 72 q8 -22 18 -30"/>
+              <circle id="bombilla" cx="170" cy="40" r="8.5" fill="#EFB80B"/>
+            </g>
+            <rect x="102" y="70" width="96" height="84" rx="30" fill="#F8F9F3"/>
+            <rect x="115" y="88" width="70" height="38" rx="15" fill="#17307A" stroke="none"/>
+            <g id="ojos" stroke="none">
+              <ellipse id="ojoIzq" cx="136" cy="107" rx="8" ry="8" fill="#5FE0BE"/>
+              <ellipse id="ojoDer" cx="164" cy="107" rx="8" ry="8" fill="#5FE0BE"/>
+            </g>
+            <rect id="boca" x="132" y="136" width="36" height="6" rx="3" fill="#F8F9F3"/>
+            <circle cx="102" cy="112" r="7.5" fill="#F8F9F3"/>
+            <circle cx="198" cy="112" r="7.5" fill="#F8F9F3"/>
+          </g>
+
+          <!-- notas que salen cuando hay señal -->
+          <g id="notas" opacity="0">
+            <path d="M252 128 v-28 l13 -4 v28" stroke-width="3"/>
+            <circle cx="249" cy="128" r="5.5" fill="#E8477F" stroke="none"/>
+            <circle cx="262" cy="124" r="5.5" fill="#E8477F" stroke="none"/>
+            <path d="M46 138 v-26" stroke-width="3"/>
+            <circle cx="43" cy="138" r="5.5" fill="#EFB80B" stroke="none"/>
+          </g>
+        </g>
+      </svg>
+    </button>
+  </div>
+  <p class="pie-avatar">El robot se mueve con lo que suena. Tócalo y te contesta.</p>
+
+  <main class="taller">
+
+    <!-- ================= COLUMNA IZQUIERDA ================= -->
+    <div class="columna-izquierda">
+
+      <aside class="panel" id="panelVisuales">
+        <header>
+          <h2>Visuales</h2>
+          <button class="boton chico" id="cambiarVista" aria-pressed="false">Congelar</button>
+        </header>
+        <canvas class="lienzo" id="onda"></canvas>
+        <canvas class="lienzo" id="espectro"></canvas>
+        <div class="medidor" aria-hidden="true"><i id="nivel"></i></div>
+        <p class="leyenda">Arriba, la forma de la onda. Abajo, los graves quedan a la izquierda y los agudos a la derecha.</p>
+      </aside>
+
+      <section class="panel" id="panelGrabaciones">
+        <header>
+          <h2>Grabaciones</h2>
+          <span class="nota" id="estadoGrabacion">Listo</span>
+        </header>
+        <p class="leyenda">Graba todo lo que suene: el ritmo, tus samples y lo que toques en el teclado. Al detener, se convierte en MP3.</p>
+        <ul class="lista" id="listaGrabaciones"></ul>
+        <p class="vacio" id="vacioGrabaciones">Todavía no grabas nada. Pulsa <b>Grabar audio</b> arriba.</p>
+      </section>
+
+      <section class="panel" id="panelProyecto">
+        <header><h2>Tu proyecto</h2></header>
+        <p class="leyenda">Tu patrón, tu tempo y tus melodías se guardan solos en este navegador. Descarga el archivo para llevarlo a otra computadora.</p>
+        <div class="fila-botones">
+          <button class="boton chico" id="descargarProyecto">Descargar proyecto</button>
+          <button class="boton chico" id="abrirProyecto">Abrir proyecto</button>
+          <input type="file" id="fileProyecto" accept="application/json,.json" hidden>
+        </div>
+        <p class="nota" id="estadoProyecto">Guardado automático activo.</p>
+      </section>
+
+      <section class="panel" id="panelFeria">
+        <header>
+          <h2>Feria</h2>
+          <span class="nota" id="conteoVisitantes">0 registros</span>
+        </header>
+        <p class="leyenda">Cada persona que se registra queda en la lista junto con lo que creó. Descárgala al terminar el día.</p>
+        <div class="fila-botones">
+          <button class="boton chico" id="descargarCSV">Descargar CSV</button>
+          <button class="boton chico" id="descargarJSON">Descargar JSON</button>
+          <button class="boton chico" id="verRegistros" aria-pressed="false">Ver lista</button>
+          <button class="boton chico" id="borrarVisitantes">Borrar lista</button>
+        </div>
+        <div class="envoltura-tabla" id="tablaVisitantes" hidden></div>
+      </section>
+
+    </div>
+
+    <!-- ================= COLUMNA DERECHA ================= -->
+    <div class="columna-derecha">
+
+      <section class="panel" id="panelRitmo">
+        <header>
+          <h2>Caja de ritmo</h2>
+          <span class="nota">16 casillas = 1 compás. Pinta una casilla para que ese sonido suene ahí.</span>
+        </header>
+
+        <div class="regla" aria-hidden="true">
+          <div></div>
+          <div id="regla"></div>
+        </div>
+        <div class="pistas" id="pistas"></div>
+
+        <div class="patrones">
+          <span>Empieza con un ritmo hecho:</span>
+          <button class="boton chico" data-preset="cumbia">Cumbia</button>
+          <button class="boton chico" data-preset="reggaeton">Reggaetón</button>
+          <button class="boton chico" data-preset="house">House</button>
+          <button class="boton chico" data-preset="trap">Trap</button>
+          <button class="boton chico" id="borrarTodo">Borrar todo</button>
+        </div>
+        <p class="consejo">Cada pista tiene un botón <b>♪</b> para cargar tu propio sonido en WAV o MP3: una palmada, tu voz, una puerta. Ese archivo reemplaza al sonido de fábrica.</p>
+      </section>
+
+      <section class="panel" id="panelTeclado">
+        <header>
+          <h2>Teclado MIDI</h2>
+          <span class="nota">Cada tecla muestra su nota en inglés (C D E F G A B) con el número de octava.</span>
+        </header>
+
+        <div class="teclado-barra">
+          <select id="instrumento" aria-label="Elige el sonido del teclado">
+            <option value="piano">Piano de papel</option>
+            <option value="bajo">Bajo redondo</option>
+            <option value="pluck">Cuerda pulsada</option>
+            <option value="campana">Campana</option>
+            <option value="pad">Colchón de cuerdas</option>
+            <option value="sample" id="optSample" disabled>Tu sample (carga uno →)</option>
+          </select>
+          <button class="boton chico" id="octMenos">Octava −</button>
+          <output class="dial" id="octVal">Octava 4</output>
+          <button class="boton chico" id="octMas">Octava +</button>
+          <button class="boton chico" id="cargarMelodico">Cargar sample melódico</button>
+          <input type="file" id="fileMelodico" accept="audio/*,.wav,.mp3" hidden>
+        </div>
+
+        <div class="teclas" id="teclas"></div>
+
+        <!-- ---------- melodías guardadas ---------- -->
+        <div class="melodias">
+          <header>
+            <h3>Tus melodías</h3>
+            <span class="nota" id="estadoMelodia">Pulsa grabar y toca lo que quieras.</span>
+          </header>
+          <div class="fila-botones">
+            <button class="boton chico grabar-melodia" id="grabarMelodia" data-grabando="false">Grabar melodía</button>
+            <input type="text" id="nombreMelodia" placeholder="Nombre de la melodía" maxlength="28">
+          </div>
+          <ul class="lista" id="listaMelodias"></ul>
+          <p class="vacio" id="vacioMelodias">Sin melodías guardadas. Graba una y podrás repetirla encima del ritmo.</p>
+        </div>
+
+        <p class="consejo">En el recuadro gris de cada tecla está la letra que la toca desde el teclado de tu computadora. C es Do, D es Re, E es Mi, F es Fa, G es Sol, A es La y B es Si. La barra espaciadora arranca y detiene el ritmo.</p>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="avisos" id="aviso" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
